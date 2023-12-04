@@ -42,6 +42,7 @@ test('fouronekbfmdrjxvn8kz1twosevenrth','47');
 test('threedmxbsevenjmdvrzlfive26', '36')
 test('twoneighthree','23');
 test('threetwo6two','32');
+test('oneight', '18');
 
 
 function test(input, shouldMatch){
@@ -77,5 +78,5 @@ function replaceNameWithDigit(input, indexToStartAt=0){
         + input.slice(indexOfFirstToReplace + 1);
     
     // skip a few chars index to work left to right
-    return replaceNameWithDigit(appendedDigitValue, indexOfFirstToReplace + 3);
+    return replaceNameWithDigit(appendedDigitValue, indexOfFirstToReplace + 2);
 }
