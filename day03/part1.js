@@ -145,14 +145,13 @@ function findSumOfAllParts(schematic) {
     const digitsRegex = /\d+/g;
     let sum = 0;
     schematic.forEach((row, lineIndex) => {
-        // keep the numbers that have a symbol around them
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll
+        // find all the numbers (based on their digits, greedy matching)
         for (const match of row.matchAll(digitsRegex)) {
             const number = match[0];
             const startOfNumberIndex = match.index;
             // at the length of the digits to the index, but; first index is already first char so substract -1
             const endNumberIndex = (-1 + match.index) + match[0].length; 
-            if(hasSymbolSurroundingItSomewhereIDontKnowHow(schematic, lineIndex, startOfNumberIndex, endNumberIndex)){
+            if(hasSymbolAdjacent(schematic, lineIndex, startOfNumberIndex, endNumberIndex)){
                 // yay we found a part number
                 sum += parseInt(number, 10);
             }
@@ -163,7 +162,7 @@ function findSumOfAllParts(schematic) {
 
 // input: 
 // lineIndex = 2, startOfDigitIndex = 4, endOfDigitIndex=7
-function hasSymbolSurroundingItSomewhereIDontKnowHow(puzzle, lineIndex, startOfDigitIndex, endOfDigitIndex) {
+function hasSymbolAdjacent(puzzle, lineIndex, startOfDigitIndex, endOfDigitIndex) {
     // console.log('searching for symbols around digit', JSON.stringify({lineIndex, startOfDigitIndex, endOfDigitIndex }))
     const minimalIndexOfSymbol = startOfDigitIndex - 1;
     const maximumIndexOfSymbol = endOfDigitIndex + 1;
@@ -182,14 +181,14 @@ function hasSymbolSurroundingItSomewhereIDontKnowHow(puzzle, lineIndex, startOfD
 
     // has a symbol in the line below?
     const lineBelow = lineIndex + 1;
-    if(containsSymbols(puzzle[lineBelow], minimalIndexOfSymbol, maximumIndexOfSymbol)) {
+    if(substringContainsSymbol(puzzle[lineBelow], minimalIndexOfSymbol, maximumIndexOfSymbol)) {
         return true;
     }
 
     return false; //didn't find anything, sorry, no part number
 }
 
-function containsSymbols(textLine, minimalIndexOfSymbol, maximumIndexOfSymbol) {
+function substringContainsSymbol(textLine, minimalIndexOfSymbol, maximumIndexOfSymbol) {
     if(textLine === undefined) {
         return false;
     }
